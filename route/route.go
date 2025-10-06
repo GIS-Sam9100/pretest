@@ -196,6 +196,20 @@ func URL(w http.ResponseWriter, r *http.Request) {
 	case method == "DELETE" && path == "/barang":
 		controller.DeleteBarang(w, r)
 	
+	// GIS Lokasi
+	case method == "GET" && path == "/lokasi":
+		if r.URL.Query().Get("id") != "" {
+			controller.GetLokasiByID(w, r)
+		} else {
+			controller.GetAllLokasi(w, r)
+		}
+	case method == "POST" && path == "/lokasi":
+		controller.CreateLokasi(w, r)
+	case method == "PUT" && path == "/lokasi":
+		controller.UpdateLokasi(w, r)
+	case method == "DELETE" && path == "/lokasi":
+		controller.DeleteLokasi(w, r)
+
 	// Google Auth
 	default:
 		controller.NotFound(w, r)
