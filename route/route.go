@@ -173,7 +173,6 @@ func URL(w http.ResponseWriter, r *http.Request) {
 		controller.RefreshLMSCookie(w, r)
 	case method == "GET" && path == "/lms/count/user":
 		controller.GetCountDocUser(w, r)
-	// Google Auth
 	case method == "POST" && path == "/auth/users":
 		controller.Auth(w, r)
 	case method == "POST" && path == "/auth/login":
@@ -182,6 +181,21 @@ func URL(w http.ResponseWriter, r *http.Request) {
 		controller.VerifyPasswordHandler(w, r)
 	case method == "POST" && path == "/auth/resend":
 		controller.ResendPasswordHandler(w, r)
+	
+	// Barang CRUD
+	case method == "GET" && path == "/barang":
+		if r.URL.Query().Get("id") != "" {
+			controller.GetBarangByID(w, r)
+		} else {
+			controller.GetAllBarang(w, r)
+		}
+	case method == "POST" && path == "/barang":
+		controller.CreateBarang(w, r)
+	case method == "PUT" && path == "/barang":
+		controller.UpdateBarang(w, r)
+	case method == "DELETE" && path == "/barang":
+		controller.DeleteBarang(w, r)
+	
 	// Google Auth
 	default:
 		controller.NotFound(w, r)

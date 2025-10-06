@@ -2,7 +2,9 @@ package at
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 )
@@ -37,6 +39,27 @@ func WriteJSON(respw http.ResponseWriter, statusCode int, content interface{}) {
 	respw.Header().Set("Content-Type", "application/json")
 	respw.WriteHeader(statusCode)
 	respw.Write([]byte(Jsonstr(content)))
+}
+
+func ReadJSON(w http.ResponseWriter, r *http.Request, data interface{}) error {
+	// Set a max body size to prevent malicious attacks
+	maxBytes := 1048576 // 1MB
+	r.Body = http.MaxBytesReader(w, r.Body, int64(maxBytes))
+
+	// Read and decode the request body
+	dec := json.NewDecoder(r.Body)
+	err := dec.Decode(data)
+	if err != nil {
+		return err
+	}
+
+	// Check if there is only one JSON value in the body
+	err = dec.Decode(&struct{}{})
+	if err != io.EOF {
+		return errors.New("body must only have a single JSON value")
+	}
+
+	return nil
 }
 
 func WriteFile(w http.ResponseWriter, statusCode int, fileContent []byte) {
