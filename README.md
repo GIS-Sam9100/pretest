@@ -4,7 +4,7 @@ This is a simple Golang Model-Controller template using [Functions Framework for
 
 Start here: Just [Fork this repo](https://github.com/gocroot/gcp/)
 
-## MongoDB Preparation
+## MongoDB Preparation.
 
 The first thing to do is prepare a Mongo database using this template:
 
